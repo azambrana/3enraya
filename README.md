@@ -12,7 +12,9 @@ Alvaro Zambrana Sejas
 * Add UI tests
 * Add more documentation
 * Sonar Lint
-* Reset game
+* Button or action to reset the game
+* Observer pattern
+* Status panel
 
 #### License:
 
