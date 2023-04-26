@@ -45,10 +45,7 @@ public class TicTacToeModel {
 
     public void updateCell(int row, int column) {
         System.out.println("Updating cell " + row + ", " + column + " with symbol " + this.currentPlayer.getSymbol());
-        if (this.isValidMove(row, column)) {
-            this.setCellSymbol(row, column);
-            this.switchPlayer();
-        }
+        this.setCellSymbol(row, column);
     }
 
     private void setCellSymbol(int row, int column) {
@@ -56,15 +53,81 @@ public class TicTacToeModel {
     }
 
     public boolean isValidMove(int row, int column) {
-        return !isTie() && !isGameOver() && isCellEmpty(row, column);
+        if ( isGameOver() || isTie() ) {
+            return false;
+        }
+
+        return isCellEmpty(row, column);
     }
 
-    private boolean isGameOver() {
-        return false;
+    public boolean isGameOver() {
+        for (int row = 0; row < this.rows; row++) {
+            if (isRowWinner(row)) {
+                return true;
+            }
+        }
+
+        for (int column = 0; column < this.columns; column++) {
+            if (isColumnWinner(column)) {
+                return true;
+            }
+        }
+
+        return isDiagonalWinner();
     }
 
-    private boolean isTie() {
-        return false;
+    private boolean isDiagonalWinner() {
+        boolean hasWinner1 = true;
+        for (int row = 0; row < this.rows; row++) {
+            hasWinner1 = hasWinner1 && this.board[row][row].getSymbol() == this.currentPlayer.getSymbol() && !isCellEmpty(row, row);
+        }
+
+        boolean hasWinner2 = true;
+
+        for (int row = 0, column = columns - 1; row < this.rows; row++, column--) {
+            hasWinner2 = hasWinner2 && this.board[row][column].getSymbol() == this.currentPlayer.getSymbol() && !isCellEmpty(row, column);
+        }
+
+        return hasWinner1 || hasWinner2;
+    }
+
+    private boolean isColumnWinner(int column) {
+        for (int row = 0; row < this.rows; row++) {
+            if (isCellEmpty(row, column)) {
+                return false;
+            }
+            if (this.board[row][column].getSymbol() != this.currentPlayer.getSymbol()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isRowWinner(int row) {
+        for (int column = 0; column < this.columns; column++) {
+            if (isCellEmpty(row, column)) {
+                return false;
+            }
+            if (this.board[row][column].getSymbol() != this.currentPlayer.getSymbol()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isTie() {
+        return !isGameOver() && hasFullBoard();
+    }
+
+    private boolean hasFullBoard() {
+        for (int row = 0; row < this.rows; row++) {
+            for (int column = 0; column < this.columns; column++) {
+                if (isCellEmpty(row, column)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private boolean isCellEmpty(int row, int column) {

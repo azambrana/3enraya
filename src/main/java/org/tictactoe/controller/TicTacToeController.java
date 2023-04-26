@@ -29,10 +29,13 @@ public class TicTacToeController implements MouseListener {
         int row = e.getY() / view.getCellHeight();
         int column = e.getX() / view.getCellWidth();
         if ( model.isValidMove(row, column)) {
+            model.switchPlayer();
             cellClicked(row, column);
             Cell cell = model.getCell(row, column);
             view.updateCellView(row, column,
-                    cell.getSymbol() == Symbol.X ? new XCellView(cell) : new OCellView(cell));
+                    cell.getSymbol() == Symbol.X ?
+                            new XCellView(view.getCellWidth(), view.getCellHeight(), cell) :
+                            new OCellView(view.getCellWidth(), view.getCellHeight(), cell));
             view.update();
         }
     }

@@ -2,13 +2,14 @@ package org.tictactoe.view;
 
 import org.tictactoe.model.Cell;
 
-import javax.swing.JComponent;
-import java.awt.Graphics;
-
-public abstract class CellView extends JComponent implements Drawable {
+public abstract class CellView implements Drawable {
     private Cell cell;
+    private int width;
+    private int height;
 
-    public CellView(Cell cell) {
+    public CellView(int width, int height, Cell cell) {
+        this.width = width;
+        this.height = height;
         this.cell = cell;
     }
 
@@ -24,8 +25,19 @@ public abstract class CellView extends JComponent implements Drawable {
         return cell.getColumn();
     }
 
-    @Override
-    public void draw(Graphics g) {
-        // ToDo: Draw the cell
+    public int getX() {
+        return getColumn() * width;
+    }
+
+    public int getY() {
+        return getRow() * height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
