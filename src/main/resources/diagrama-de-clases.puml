@@ -1,0 +1,108 @@
+@startuml
+'https://plantuml.com/class-diagram
+' Tic Tac Toe OOP MVC design
+
+TicTacToe  *-- TicTacToeController
+TicTacToe  *-- TicTacToeView
+TicTacToe  *-- TicTacToeModel
+
+TicTacToeController o-- TicTacToeView
+TicTacToeController o-- TicTacToeModel
+
+TicTacToeView *-- CellView
+JFrame *-- TicTacToeView
+Player o-- Symbol
+Cell o-- Symbol
+TicTacToeModel *-- Cell
+TicTacToeModel *-- Player
+
+class TicTacToe {
+    - controller: TicTacToeController
+    - view: TicTacToeView
+    - model: TicTacToeModel
+
+    + TicTacToe()
+}
+
+' MVC
+
+
+' Models
+
+enum Symbol {
+    X
+    O
+    EMPTY
+}
+
+class Cell {
+    - row: int
+    - col: int
+    - value: Symbol
+
+    + Cell(row: int, col: int)
+    + setValue(value: Symbol)
+    + getValue(): Symbol
+}
+
+class Player {
+    - name: String
+    - symbol: Symbol
+
+    + Player(name: String, symbol: Symbol)
+    + getSymbol(): Symbol
+}
+
+class TicTacToeModel {
+    - board: Cell[][]
+    - currentPlayer: Player
+    - player1: Player
+    - player2: Player
+
+    + TicTacToeModel(rows: int, cols: int)
+
+    - initializeBoard(rows: int, cols: int)
+    + getBoard(): Cell[][]
+    + getCell(row: int, col: int): Cell
+    + getCurrentPlayer(): Player
+    + getWinner(): Player
+    + isGameOver(): boolean
+    + isTie(): boolean
+    + reset()
+    + setCell(row: int, col: int, player: Player)
+    + switchPlayer()
+    + isValidMove(row: int, col: int): boolean
+}
+
+' Views
+class TicTacToeView extends JPanel implements Drawable {
+    - cellViews: CellView[][]
+
+    + TicTacToeView(rows: int, cols: int)
+}
+
+interface Drawable {
+    + draw(g: Graphics)
+}
+
+class XCellView extends CellView {}
+class OCellView extends CellView {}
+class EmptyCellView extends CellView {}
+
+abstract class CellView extends JComponent implements Drawable {
+    row: int
+    col: int
+    + CellView(row: int, col: int)
+}
+
+' Controllers
+
+class TicTacToeController implements MouseListener {
+    - view: TicTacToeView
+    - model: TicTacToeModel
+
+    + TicTacToeController(view: TicTacToeView, model: TicTacToeModel)
+    + cellClicked(row: int, col: int)
+}
+
+@enduml
